@@ -8,7 +8,17 @@ const FeedbackButton = ({ text, handleClick }) => (
 
 const Statistics = ({ values }) => {
 
+
   const allFeedbacks = values.good + values.neutral + values.bad
+
+  if (allFeedbacks === 0) {
+    return (
+      <>
+        <h2>Statistics</h2>
+        <p>No feedback given</p>
+      </>
+    )
+  }
 
   const calculateAverage = () => ((values.good - values.bad) / allFeedbacks)
 
