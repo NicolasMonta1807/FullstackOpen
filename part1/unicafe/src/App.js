@@ -6,8 +6,9 @@ const FeedbackButton = ({ text, handleClick }) => (
   </button>
 )
 
-const Statistics = ({ values }) => {
+const StatisticLine = ({ text, value }) => (<p>{text} {value}</p>)
 
+const Statistics = ({ values }) => {
 
   const allFeedbacks = values.good + values.neutral + values.bad
 
@@ -15,7 +16,7 @@ const Statistics = ({ values }) => {
     return (
       <>
         <h2>Statistics</h2>
-        <p>No feedback given</p>
+        <StatisticLine text="No feedback given" />
       </>
     )
   }
@@ -27,13 +28,12 @@ const Statistics = ({ values }) => {
   return (
     <>
       <h2>Statistics</h2>
-      <p>Good: {values.good}</p>
-      <p>Neutral: {values.neutral}</p>
-      <p>Bad: {values.bad}</p>
-      <h3>Totals:</h3>
-      <p>All: {allFeedbacks}</p>
-      <p>Average: {calculateAverage()}</p>
-      <p>Positive: {calculatePositive()}%</p>
+      <StatisticLine text="Good: " value={values.good}></StatisticLine>
+      <StatisticLine text="Neutral: " value={values.neutral}></StatisticLine>
+      <StatisticLine text="Bad: " value={values.bad}></StatisticLine>
+      <StatisticLine text="All: " value={allFeedbacks}></StatisticLine>
+      <StatisticLine text="Average: " value={calculateAverage()}></StatisticLine>
+      <StatisticLine text="Positive: " value={calculatePositive()}></StatisticLine>
     </>
   )
 }
