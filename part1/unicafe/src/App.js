@@ -6,7 +6,12 @@ const FeedbackButton = ({ text, handleClick }) => (
   </button>
 )
 
-const StatisticLine = ({ text, value }) => (<p>{text} {value}</p>)
+const StatisticLine = ({ text, value }) => (
+  <tr>
+    <td>{text}</td>
+    <td>{value}</td>
+  </tr>
+)
 
 const Statistics = ({ values }) => {
 
@@ -16,7 +21,11 @@ const Statistics = ({ values }) => {
     return (
       <>
         <h2>Statistics</h2>
-        <StatisticLine text="No feedback given" />
+        <table>
+          <tbody>
+            <StatisticLine text="No feedback given" />
+          </tbody>
+        </table>
       </>
     )
   }
@@ -28,12 +37,16 @@ const Statistics = ({ values }) => {
   return (
     <>
       <h2>Statistics</h2>
-      <StatisticLine text="Good: " value={values.good}></StatisticLine>
-      <StatisticLine text="Neutral: " value={values.neutral}></StatisticLine>
-      <StatisticLine text="Bad: " value={values.bad}></StatisticLine>
-      <StatisticLine text="All: " value={allFeedbacks}></StatisticLine>
-      <StatisticLine text="Average: " value={calculateAverage()}></StatisticLine>
-      <StatisticLine text="Positive: " value={calculatePositive()}></StatisticLine>
+      <table>
+        <tbody>
+          <StatisticLine text="Good: " value={values.good}></StatisticLine>
+          <StatisticLine text="Neutral: " value={values.neutral}></StatisticLine>
+          <StatisticLine text="Bad: " value={values.bad}></StatisticLine>
+          <StatisticLine text="All: " value={allFeedbacks}></StatisticLine>
+          <StatisticLine text="Average: " value={calculateAverage()}></StatisticLine>
+          <StatisticLine text="Positive: " value={calculatePositive()}></StatisticLine>
+        </tbody>
+      </table>
     </>
   )
 }
