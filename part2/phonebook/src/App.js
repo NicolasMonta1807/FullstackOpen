@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import Filter from './components/Filter';
+import ContactForm from './components/ContactForm';
+import DisplayContacts from './components/DisplayContacts';
 
 const App = () => {
 
@@ -48,30 +51,17 @@ const App = () => {
   return (
     <>
       <h2>Phonebook</h2>
-      <div>
-        <label htmlFor="filter">Search by name: </label>
-        <input type="text" value={filter} onChange={handleFilter} />
-      </div>
+      <Filter filter={filter} handleFilter={handleFilter} />
       <h2>Add new contact</h2>
-      <form>
-        <div>
-          <label htmlFor="name">Name:</label>
-          <input id='name' type="text" value={newName} onChange={handleNameChange} />
-        </div>
-        <div>
-          <label htmlFor="phonenumber">Number:</label>
-          <input id='phonenumber' type="number" value={newNumber} onChange={handleNumberChange} />
-        </div>
-        <div>
-          <button type="submit" onClick={handleNewContact}>Save contact</button>
-        </div>
-      </form>
+      <ContactForm
+        newName={newName}
+        handleNameChange={handleNameChange}
+        newNumber={newNumber}
+        handleNumberChange={handleNumberChange}
+        handleNewContact={handleNewContact}
+      />
       <h2>Numbers</h2>
-      <div>
-        {contactsToShow().map((person) => (
-          <p key={person.id}>{person.name} - {person.number}</p>
-        ))}
-      </div>
+      <DisplayContacts contactsToShow={contactsToShow} />
     </>
   );
 }
