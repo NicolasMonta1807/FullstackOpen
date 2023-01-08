@@ -9,9 +9,17 @@ const App = () => {
   const handleNameChange = (event) => setNewName(event.target.value)
 
   const handleNewContact = (event) => {
+
     event.preventDefault()
-    setPersons(persons.concat(newName))
-    setNewName("")
+    if (persons.includes(newName)) {
+      alert(`${newName} is already added to phonebook`)
+      setNewName("")
+    }
+    else {
+      setPersons(persons.concat(newName))
+      setNewName("")
+    }
+
   }
 
   return (
