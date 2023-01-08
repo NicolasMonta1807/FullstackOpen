@@ -21,6 +21,8 @@ const App = () => {
     ))
   )
 
+  const showCountry = (countryName) => setFilter(countryName)
+
   return (
     <>
       <label htmlFor="filter">Find countries: </label>
@@ -30,7 +32,7 @@ const App = () => {
         placeholder="Country name..."
         onChange={handleFilterChange}
       />
-      <Countries countriesList={countriesToShow()} />
+      <Countries buttonHandler={showCountry} countriesList={countriesToShow()} />
     </>
   );
 }

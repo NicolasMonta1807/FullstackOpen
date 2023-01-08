@@ -1,7 +1,13 @@
-const CountryName = ({ name }) => {
+const CountryName = ({ name, buttonHandler }) => {
+
+  const handleClick = () => buttonHandler(name)
+
   return (
     <>
-      <p>{name}</p>
+      <p>
+        {name}
+        <button onClick={handleClick}>Show</button>
+      </p>
     </>
   )
 }
