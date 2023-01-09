@@ -22,10 +22,13 @@ const Weather = ({ capitalName, lat, lon }) => {
 
   const iconUrl = `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`
 
+  const mainDesc = data.weather[0].description[0].toUpperCase() + data.weather[0].description.substring(1)
+
   return (
     <>
       <h3>Weather in {capitalName}</h3>
-      <img src={iconUrl} alt={data.weather[0].description} />
+      <p>Main: {mainDesc} </p>
+      <img src={iconUrl} alt={mainDesc} />
       <p>Current temperature: {data.main.temp}°</p>
       <p>Wind speed: {data.wind.speed} m/s</p>
     </>
