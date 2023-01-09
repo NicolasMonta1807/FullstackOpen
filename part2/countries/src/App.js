@@ -5,12 +5,14 @@ import Countries from './components/Countries';
 const App = () => {
 
   const [filter, setFilter] = useState("")
-  const [countries, setCountries] = useState([])
+  const [countries, setCountries] = useState(null)
 
   useEffect(() => {
     axios
       .get("https://restcountries.com/v3.1/all")
-      .then((response) => setCountries(response.data))
+      .then((response) => {
+        return setCountries(response.data);
+      })
   }, [])
 
   const handleFilterChange = (event) => setFilter(event.target.value)
@@ -22,6 +24,11 @@ const App = () => {
   )
 
   const showCountry = (countryName) => setFilter(countryName)
+
+  if (!countries){
+    console.log("fetching data...");
+    return null
+  }
 
   return (
     <>
