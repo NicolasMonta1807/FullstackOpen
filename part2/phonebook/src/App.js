@@ -6,6 +6,8 @@ import DisplayContacts from './components/DisplayContacts';
 
 const App = () => {
 
+  const baseUrl = "http://localhost:3001/persons"
+
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState("")
   const [newNumber, setNewNumber] = useState("")
@@ -13,7 +15,7 @@ const App = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/persons")
+      .get(baseUrl)
       .then(response => {
         setPersons(response.data)
       })
@@ -38,6 +40,7 @@ const App = () => {
       setPersons(persons.concat(personObject))
       setNewName("")
       setNewNumber("")
+      axios.post(baseUrl, personObject)
     }
   }
 
