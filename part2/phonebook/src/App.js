@@ -30,22 +30,33 @@ const App = () => {
         )
       ) {
         const personToChange = persons.find(person => person.name === newName)
-        console.log(personToChange)
         const personObject = {
           ...personToChange,
           number: newNumber
         }
-        contactsService.update(personObject).then(updatedPerson => {
-          setPersons(
-            persons.map(person =>
-              person.id !== updatedPerson.id ? person : updatedPerson
+        contactsService
+          .update(personObject)
+          .then(updatedPerson => {
+            setPersons(
+              persons.map(person =>
+                person.id !== updatedPerson.id ? person : updatedPerson
+              )
             )
-          )
-          setNewName('')
-          setNewNumber('')
-          setNotification(`Contact ${newName} updated`)
-          setTimeout(() => setNotification(null), 3000)
-        })
+            setNewName('')
+            setNewNumber('')
+            setNotification({
+              content: `Contact ${newName} updated`,
+              error: false
+            })
+            setTimeout(() => setNotification(null), 3000)
+          })
+          .catch(error => {
+            console.log(error)
+            setNotification({
+              content: `Error: ${personObject.name} has been deleted from server`,
+              error: true
+            })
+          })
       } else {
         setNewName('')
         setNewNumber('')
@@ -59,7 +70,10 @@ const App = () => {
       setNewName('')
       setNewNumber('')
       contactsService.create(personObject).then(createdContact => {
-        setNotification(`Contact ${newName} created`)
+        setNotification({
+          content: `Contact ${newName} updated`,
+          error: false
+        })
         setTimeout(() => setNotification(null), 3000)
         setPersons(persons.concat(createdContact))
       })
