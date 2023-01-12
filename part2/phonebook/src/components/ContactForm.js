@@ -1,17 +1,35 @@
-const ContactForm = ({ newName, handleNameChange, newNumber, handleNumberChange, handleNewContact }) => {
+const ContactForm = ({
+  newName,
+  handleNameChange,
+  newNumber,
+  handleNumberChange,
+  handleNewContact
+}) => {
   return (
     <>
       <form>
         <div>
-          <label htmlFor="name">Name:</label>
-          <input id='name' type="text" value={newName} onChange={handleNameChange} />
+          <label htmlFor='name'>Name:</label>
+          <input
+            id='name'
+            type='text'
+            value={newName}
+            onChange={handleNameChange}
+          />
         </div>
         <div>
-          <label htmlFor="phonenumber">Number:</label>
-          <input id='phonenumber' type="number" value={newNumber} onChange={handleNumberChange} />
+          <label htmlFor='phonenumber'>Number:</label>
+          <input
+            id='phonenumber'
+            type='number'
+            value={newNumber}
+            onChange={handleNumberChange}
+          />
         </div>
         <div>
-          <button type="submit" onClick={handleNewContact}>Save contact</button>
+          <button type='submit' onClick={handleNewContact}>
+            Save contact
+          </button>
         </div>
       </form>
     </>

@@ -1,57 +1,52 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import Filter from './components/Filter';
-import ContactForm from './components/ContactForm';
-import DisplayContacts from './components/DisplayContacts';
+import { useState, useEffect } from 'react'
+import Filter from './components/Filter'
+import ContactForm from './components/ContactForm'
+import DisplayContacts from './components/DisplayContacts'
+import contactsService from './services/ContactsService'
 
 const App = () => {
-
-  const baseUrl = "http://localhost:3001/persons"
-
   const [persons, setPersons] = useState([])
-  const [newName, setNewName] = useState("")
-  const [newNumber, setNewNumber] = useState("")
-  const [filter, setFilter] = useState("")
+  const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
+  const [filter, setFilter] = useState('')
 
   useEffect(() => {
-    axios
-      .get(baseUrl)
-      .then(response => {
-        setPersons(response.data)
-      })
+    contactsService.getAll().then(allContacts => {
+      setPersons(allContacts)
+    })
   }, [])
 
-  const handleNameChange = (event) => setNewName(event.target.value)
+  const handleNameChange = event => setNewName(event.target.value)
 
-  const handleNewContact = (event) => {
+  const handleNewContact = event => {
     event.preventDefault()
     const alreadyAdded = persons.some(person => person.name === newName)
     if (alreadyAdded) {
       alert(`${newName} is already added to phonebook`)
-      setNewName("")
-      setNewNumber("")
-    }
-    else {
+      setNewName('')
+      setNewNumber('')
+    } else {
       const personObject = {
         id: persons.length + 1,
         name: newName,
         number: newNumber
       }
-      setPersons(persons.concat(personObject))
-      setNewName("")
-      setNewNumber("")
-      axios.post(baseUrl, personObject)
+      setNewName('')
+      setNewNumber('')
+      contactsService
+        .create(personObject)
+        .then(createdContact => setPersons(persons.concat(createdContact)))
     }
   }
 
-  const handleNumberChange = (event) => setNewNumber(event.target.value)
+  const handleNumberChange = event => setNewNumber(event.target.value)
 
-  const handleFilter = (event) => setFilter(event.target.value)
+  const handleFilter = event => setFilter(event.target.value)
 
   const contactsToShow = () => {
-    const showingContacts = persons.filter((person) => (
+    const showingContacts = persons.filter(person =>
       person.name.toLowerCase().includes(filter.toLowerCase())
-    ))
+    )
     return showingContacts
   }
 
@@ -70,7 +65,7 @@ const App = () => {
       <h2>Numbers</h2>
       <DisplayContacts contactsToShow={contactsToShow} />
     </>
-  );
+  )
 }
 
-export default App;
+export default App
