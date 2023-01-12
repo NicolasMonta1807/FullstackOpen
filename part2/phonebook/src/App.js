@@ -43,11 +43,15 @@ const App = () => {
 
   const handleFilter = event => setFilter(event.target.value)
 
-  const contactsToShow = () => {
-    const showingContacts = persons.filter(person =>
+  const contactsToShow = () =>
+    persons.filter(person =>
       person.name.toLowerCase().includes(filter.toLowerCase())
     )
-    return showingContacts
+
+  const handleDeleting = id => {
+    contactsService.remove(id).then(response => {
+      setPersons(persons.filter(person => person.id !== id))
+    })
   }
 
   return (
@@ -63,7 +67,10 @@ const App = () => {
         handleNewContact={handleNewContact}
       />
       <h2>Numbers</h2>
-      <DisplayContacts contactsToShow={contactsToShow} />
+      <DisplayContacts
+        contactsToShow={contactsToShow}
+        handleDeleting={handleDeleting}
+      />
     </>
   )
 }
