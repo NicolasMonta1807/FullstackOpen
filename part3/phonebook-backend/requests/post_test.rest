@@ -5,3 +5,28 @@ Content-Type: application/json
   "name": "Foo Bar",
   "number": "12-345-678"
 }
+
+###
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+  "name": "Foo Bar"
+}
+
+###
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+  "number": "555-666-777"
+}
+
+###
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+  "name": "Arto Hellas",
+  "number": "123-456-789"
+}

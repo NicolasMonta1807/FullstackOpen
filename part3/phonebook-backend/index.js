@@ -59,13 +59,24 @@ app.delete('/api/persons/:id', (request, response) => {
 
 app.post('/api/persons', (request, response) => {
   const body = request.body
+
+  if(!body.name || !body.number) {
+    response.statusMessage = "error: name or number missing"
+    return response.status(400).end()
+  }
+
+  if (persons.some(person => person.name === body.name)) {
+    response.statusMessage = "error: name must be unique"
+    return response.status(400).end()
+  }
+
   console.log(body)
   const person = {
     id: Math.floor(Math.random() * 100),
     name: body.name,
     number: body.number
   }
-  response.status(201).json(person)
+  return response.status(201).json(person)
 })
 
 const PORT = 3001
