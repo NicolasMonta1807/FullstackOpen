@@ -25,6 +25,17 @@ let persons = [
 
 const app = express()
 
+app.get('/info', (request, response) => {
+  console.log(request.headers)
+  response
+    .status(200)
+    .send(
+      `<p>Phonebook has info for ${
+        persons.length
+      } people</p> <p>${new Date()}</p>`
+    )
+})
+
 app.get('/api/persons', (request, response) => {
   response.status(200).json(persons)
 })
