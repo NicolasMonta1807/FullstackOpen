@@ -20,64 +20,75 @@ const App = () => {
 
   const handleNameChange = event => setNewName(event.target.value)
 
-  const handleNewContact = event => {
-    event.preventDefault()
-    const alreadyAdded = persons.some(person => person.name === newName)
-    if (alreadyAdded) {
-      if (
-        window.confirm(
-          `${newName} is already added to phonebook. Would you like to update their number?`
+  const createContact = personObject => {
+    setNewName('')
+    setNewNumber('')
+    contactsService.create(personObject).then(createdContact => {
+      setNotification({
+        content: `Contact ${personObject.name} created`,
+        error: false
+      })
+      setTimeout(() => setNotification(null), 3000)
+      setPersons(persons.concat(createdContact))
+    })
+  }
+
+  const updateContact = personObject => {
+    contactsService
+      .update(personObject)
+      .then(updatedPerson => {
+        setPersons(
+          persons.map(person =>
+            person.id !== updatedPerson.id ? person : updatedPerson
+          )
         )
-      ) {
-        const personToChange = persons.find(person => person.name === newName)
-        const personObject = {
-          ...personToChange,
-          number: newNumber
-        }
-        contactsService
-          .update(personObject)
-          .then(updatedPerson => {
-            setPersons(
-              persons.map(person =>
-                person.id !== updatedPerson.id ? person : updatedPerson
-              )
-            )
-            setNewName('')
-            setNewNumber('')
-            setNotification({
-              content: `Contact ${newName} updated`,
-              error: false
-            })
-            setTimeout(() => setNotification(null), 3000)
-          })
-          .catch(error => {
-            console.log(error)
-            setNotification({
-              content: `Error: ${personObject.name} has been deleted from server`,
-              error: true
-            })
-          })
-      } else {
         setNewName('')
         setNewNumber('')
-      }
-    } else {
-      const personObject = {
-        name: newName,
-        number: newNumber,
-        id: persons.length + 1
-      }
-      setNewName('')
-      setNewNumber('')
-      contactsService.create(personObject).then(createdContact => {
         setNotification({
           content: `Contact ${newName} updated`,
           error: false
         })
         setTimeout(() => setNotification(null), 3000)
-        setPersons(persons.concat(createdContact))
       })
+      .catch(error => {
+        console.log(error)
+        setNotification({
+          content: `Error: ${personObject.name} has been deleted from server`,
+          error: true
+        })
+      })
+  }
+
+  const handleNewContact = event => {
+    event.preventDefault()
+    const alreadyAdded = persons.some(person => person.name === newName)
+    if (!alreadyAdded) {
+      const personObject = {
+        name: newName,
+        number: newNumber,
+        id: persons.length + 1
+      }
+      createContact(personObject)
+      return
     }
+
+    if (
+      !window.confirm(
+        `${newName} is already added to phonebook. Would you like to update their number?`
+      )
+    ) {
+      setNewName('')
+      setNewNumber('')
+      return
+    }
+
+    const personToChange = persons.find(person => person.name === newName)
+    const personObject = {
+      ...personToChange,
+      number: newNumber
+    }
+    updateContact(personObject)
+    return
   }
 
   const handleNumberChange = event => setNewNumber(event.target.value)
