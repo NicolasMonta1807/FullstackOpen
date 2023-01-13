@@ -5,3 +5,6 @@ GET http://localhost:3001/api/persons/2
 
 ###
 GET http://localhost:3001/api/persons/10000
+
+###
+GET http://localhost:3001/info

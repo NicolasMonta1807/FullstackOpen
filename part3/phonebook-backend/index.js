@@ -1,4 +1,5 @@
 const express = require('express')
+const morgan = require('morgan')
 
 let persons = [
   {
@@ -25,9 +26,9 @@ let persons = [
 
 const app = express()
 app.use(express.json())
+app.use(morgan('tiny'))
 
 app.get('/info', (request, response) => {
-  console.log(request.headers)
   response
     .status(200)
     .send(
@@ -44,7 +45,6 @@ app.get('/api/persons', (request, response) => {
 app.get('/api/persons/:id', (request, response) => {
   const id = Number(request.params.id)
   const person = persons.find(person => person.id === id)
-  console.log(person)
   if (!person) {
     return response.status(404).json({ error: 'Resource not found' })
   }
@@ -60,17 +60,16 @@ app.delete('/api/persons/:id', (request, response) => {
 app.post('/api/persons', (request, response) => {
   const body = request.body
 
-  if(!body.name || !body.number) {
-    response.statusMessage = "error: name or number missing"
+  if (!body.name || !body.number) {
+    response.statusMessage = 'error: name or number missing'
     return response.status(400).end()
   }
 
   if (persons.some(person => person.name === body.name)) {
-    response.statusMessage = "error: name must be unique"
+    response.statusMessage = 'error: name must be unique'
     return response.status(400).end()
   }
 
-  console.log(body)
   const person = {
     id: Math.floor(Math.random() * 100),
     name: body.name,
