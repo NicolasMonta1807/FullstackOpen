@@ -26,7 +26,14 @@ let persons = [
 
 const app = express()
 app.use(express.json())
-app.use(morgan('tiny'))
+morgan.token('postInfo', (request, response) => {
+  return JSON.stringify(request.body)
+})
+app.use(
+  morgan(
+    ':method :url :status :res[content-length] - :response-time ms :postInfo'
+  )
+)
 
 app.get('/info', (request, response) => {
   response
@@ -75,7 +82,8 @@ app.post('/api/persons', (request, response) => {
     name: body.name,
     number: body.number
   }
-  return response.status(201).json(person)
+
+  response.status(201).json(person)
 })
 
 const PORT = 3001
