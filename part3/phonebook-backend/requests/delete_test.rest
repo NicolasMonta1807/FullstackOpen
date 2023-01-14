@@ -1,4 +1,4 @@
-DELETE http://localhost:3001/api/persons/1
+DELETE http://localhost:8080/api/persons/1
 
 ###
-DELETE http://localhost:3001/api/persons/10000
+DELETE http://localhost:8080/api/persons/10000
