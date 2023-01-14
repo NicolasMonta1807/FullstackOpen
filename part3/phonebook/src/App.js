@@ -56,6 +56,7 @@ const App = () => {
           content: `Error: ${personObject.name} has been deleted from server`,
           error: true
         })
+        setTimeout(() => setNotification(null), 3000)
       })
   }
 
