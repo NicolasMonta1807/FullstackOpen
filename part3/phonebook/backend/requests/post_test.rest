@@ -3,7 +3,7 @@ Content-Type: application/json
 
 {
   "name": "Foo Bar",
-  "number": "12-345-678"
+  "number": "10-22-334455"
 }
 
 ###
@@ -28,5 +28,5 @@ Content-Type: application/json
 
 {
   "name": "Bar zoo",
-  "number": "57-88-75-320"
+  "number": "09-1234556"
 }
