@@ -3,7 +3,7 @@ const Notification = ({ message }) => {
     return null
   } else {
     return (
-      <div className={'notification ' + `${message.error ? 'error' : ''}`}>
+      <div className={`notification ${message.error ? 'error' : ''}`}>
         {message.content}
       </div>
     )

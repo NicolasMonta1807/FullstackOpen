@@ -38,21 +38,12 @@ app.post('/api/persons', (request, response) => {
     return response.status(400).end()
   }
 
-  let repeated = null
-  Person.findOne({ name: body.name }).then(result => {
-    repeated = result
-    if (repeated != null) {
-      response.statusMessage = 'error: name must be unique'
-      return response.status(400).end()
-    } else {
-      const person = new Person({
-        name: body.name,
-        number: body.number
-      })
-
-      person.save().then(result => response.status(201).end())
-    }
+  const person = new Person({
+    name: body.name,
+    number: body.number
   })
+
+  person.save().then(result => response.status(201).json(person).end())
 })
 
 const PORT = process.env.PORT || 8080
