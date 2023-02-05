@@ -9,8 +9,8 @@ app.use(express.static('build'))
 app.use(cors())
 
 app.get('/api/persons', (request, response) => {
-  Person.find({}).then(notes => {
-    response.json(notes).end()
+  Person.find({}).then(persons => {
+    response.json(persons).end()
   })
 })
 
@@ -20,6 +20,14 @@ app.get('/api/persons/:id', (request, response, next) => {
       response.json(result).end()
     })
     .catch(error => next(error))
+})
+
+app.get('/info', (request, response) => {
+  Person.find({}).then(result =>
+    response.send(
+      `<h1>Phonebook</h1> <p>Server has info for ${result.length} people</p>`
+    )
+  )
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
