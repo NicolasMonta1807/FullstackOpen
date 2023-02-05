@@ -1,62 +1,33 @@
+require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
-
-let persons = [
-  {
-    id: 1,
-    name: 'Arto Hellas',
-    number: '040-123456'
-  },
-  {
-    id: 2,
-    name: 'Ada Lovelace',
-    number: '39-44-5323523'
-  },
-  {
-    id: 3,
-    name: 'Dan Abramov',
-    number: '12-43-234345'
-  },
-  {
-    id: 4,
-    name: 'Mary Poppendieck',
-    number: '39-23-6423122'
-  }
-]
-
 const app = express()
+const Person = require('./models/person')
+
 app.use(express.json())
 app.use(express.static('build'))
-
 app.use(cors())
 
-app.get('/info', (request, response) => {
-  response
-    .status(200)
-    .send(
-      `<p>Phonebook has info for ${
-        persons.length
-      } people</p> <p>${new Date()}</p>`
-    )
-})
-
 app.get('/api/persons', (request, response) => {
-  response.status(200).json(persons)
+  Person.find({}).then(notes => {
+    response.json(notes).end()
+  })
 })
 
 app.get('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const person = persons.find(person => person.id === id)
-  if (!person) {
-    return response.status(404).json({ error: 'Resource not found' })
-  }
-  return response.status(200).json(person)
+  Person.findById(request.params.id)
+    .then(result => {
+      response.json(result).end()
+    })
+    .catch(error => {
+      response.status(404).json({ error: 'id not found' }).end()
+    })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  persons = persons.filter(person => person.id !== id)
-  response.status(204).end()
+  Person.deleteOne({ _id: request.params.id }).then(result =>
+    response.status(204).end()
+  )
 })
 
 app.post('/api/persons', (request, response) => {
@@ -67,19 +38,21 @@ app.post('/api/persons', (request, response) => {
     return response.status(400).end()
   }
 
-  if (persons.some(person => person.name === body.name)) {
-    response.statusMessage = 'error: name must be unique'
-    return response.status(400).end()
-  }
+  let repeated = null
+  Person.findOne({ name: body.name }).then(result => {
+    repeated = result
+    if (repeated != null) {
+      response.statusMessage = 'error: name must be unique'
+      return response.status(400).end()
+    } else {
+      const person = new Person({
+        name: body.name,
+        number: body.number
+      })
 
-  const person = {
-    id: Math.floor(Math.random() * 100),
-    name: body.name,
-    number: body.number
-  }
-
-  persons = persons.concat(person)
-  return response.status(201).json(person)
+      person.save().then(result => response.status(201).end())
+    }
+  })
 })
 
 const PORT = process.env.PORT || 8080

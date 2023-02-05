@@ -1,4 +1,1 @@
-DELETE http://localhost:8080/api/persons/1
-
-###
-DELETE http://localhost:8080/api/persons/10000
+DELETE http://localhost:8080/api/persons/63e00a6cda25dc0093575671

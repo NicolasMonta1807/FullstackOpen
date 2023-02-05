@@ -27,6 +27,6 @@ POST http://localhost:8080/api/persons
 Content-Type: application/json
 
 {
-  "name": "Arto Hellas",
-  "number": "123-456-789"
+  "name": "Bar zoo",
+  "number": "57-88-75-320"
 }
