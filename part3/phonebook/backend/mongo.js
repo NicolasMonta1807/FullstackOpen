@@ -1,27 +1,21 @@
 const mongoose = require('mongoose')
+require('dotenv').config()
 
-if (process.argv.length < 3) {
-  console.log('Please, provide a password: node mongo.js <password>')
-  process.exit(1)
-}
-
-if (process.argv.length > 5) {
+if (process.argv.length > 4) {
   console.log('Wrong usage: Too many arguments')
   process.exit(1)
 }
 
-if (process.argv.length === 4) {
+if (process.argv.length === 3) {
   console.log('Wrong usage: number or name missing')
   process.exit(1)
 }
 
 mongoose.set('strictQuery', true)
 
-const getAll = process.argv.length === 3
+const getAll = process.argv.length === 2
 
-const password = process.argv[2]
-
-const url = `mongodb+srv://nikoresu-h4cker:${password}@fsopen-course.zn4zgrd.mongodb.net/phonebook?retryWrites=true&w=majority`
+const url = process.env.MONGODB_URI
 
 const personSchema = new mongoose.Schema({
   name: String,
@@ -44,8 +38,8 @@ if (getAll) {
     .catch(error => console.log(error))
 } else {
   const person = new Person({
-    name: process.argv[3],
-    number: process.argv[4]
+    name: process.argv[2],
+    number: process.argv[3]
   })
 
   mongoose
