@@ -16,4 +16,4 @@ const remove = id => axios.delete(`${baseUrl}/${id}`)
 
 const utils = { getAll, create, update, remove }
 
-export default utils 
+export default utils

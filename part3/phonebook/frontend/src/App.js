@@ -23,14 +23,24 @@ const App = () => {
   const createContact = personObject => {
     setNewName('')
     setNewNumber('')
-    contactsService.create(personObject).then(createdContact => {
-      setNotification({
-        content: `Contact ${personObject.name} created`,
-        error: false
+    contactsService
+      .create(personObject)
+      .then(createdContact => {
+        setNotification({
+          content: `Contact ${personObject.name} created`,
+          error: false
+        })
+        setTimeout(() => setNotification(null), 3000)
+        setPersons(persons.concat(createdContact))
       })
-      setTimeout(() => setNotification(null), 3000)
-      setPersons(persons.concat(createdContact))
-    })
+      .catch(error => {
+        console.log(error.response.data.error)
+        setNotification({
+          content: error.response.data.error,
+          error: true
+        })
+        setTimeout(() => setNotification(null), 3000)
+      })
   }
 
   const updateContact = personObject => {
