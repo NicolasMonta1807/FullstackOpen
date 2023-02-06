@@ -4,7 +4,7 @@ mongoose.set('strictQuery', false)
 
 mongoose
   .connect(process.env.MONGODB_URI)
-  .then(result => console.log('connected to database'))
+  .then(() => console.log('connected to database'))
   .catch(error => console.log(error))
 
 const personSchema = new mongoose.Schema({
@@ -24,7 +24,7 @@ const personSchema = new mongoose.Schema({
       },
       message: 'Phone number is not valid'
     },
-    required: [true, 'Phone number is required'],
+    required: [true, 'Phone number is requiered'],
     unique: true
   }
 })

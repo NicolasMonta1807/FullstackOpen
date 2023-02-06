@@ -1,6 +1,7 @@
 require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
+
 const app = express()
 const Person = require('./models/person')
 
@@ -9,35 +10,33 @@ app.use(express.static('build'))
 app.use(cors())
 
 app.get('/api/persons', (request, response) => {
-  Person.find({}).then(persons => {
+  Person.find({}).then((persons) => {
     response.json(persons).end()
   })
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
   Person.findById(request.params.id)
-    .then(result => {
+    .then((result) => {
       response.json(result).end()
     })
-    .catch(error => next(error))
+    .catch((error) => next(error))
 })
 
 app.get('/info', (request, response) => {
-  Person.find({}).then(result =>
-    response.send(
-      `<h1>Phonebook</h1> <p>Server has info for ${result.length} people</p>`
-    )
-  )
+  Person.find({}).then((result) => response.send(
+    `<h1>Phonebook</h1> <p>Server has info for ${result.length} people</p>`,
+  ))
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.deleteOne({ _id: request.params.id })
-    .then(result => response.status(204).end())
-    .catch(error => next(error))
+    .then(() => response.status(204).end())
+    .catch((error) => next(error))
 })
 
 app.post('/api/persons', (request, response, next) => {
-  const body = request.body
+  const { body } = request
 
   const person = new Person({
     name: body.name,
@@ -46,7 +45,7 @@ app.post('/api/persons', (request, response, next) => {
 
   person
     .save()
-    .then(result => response.status(201).json(person).end())
+    .then(() => response.status(201).json(person).end())
     .catch(error => next(error))
 })
 

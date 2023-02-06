@@ -44,7 +44,7 @@ if (getAll) {
 
   mongoose
     .connect(url)
-    .then(result => {
+    .then(() => {
       return person.save()
     })
     .then(() => {
