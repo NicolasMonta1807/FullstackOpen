@@ -1,16 +1,17 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
-const app = require('../app')
+const { app, server } = require('../index')
 
 const api = supertest(app)
 
-test('blogs are returned in json', async () => {
+test('notes are returned as json', async () => {
   await api
-    .get('/api/notes')
+    .get('/api/blogs')
     .expect(200)
     .expect('Content-Type', /application\/json/)
 })
 
 afterAll(async () => {
   await mongoose.connection.close()
+  await server.close()
 })

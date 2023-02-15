@@ -6,7 +6,7 @@
   "scripts": {
     "start": "NODE_ENV=production node index.js",
     "dev": "NODE_ENV=development nodemon index.js",
-    "test": "NODE_ENV=test jest --verbose"
+    "test": "NODE_ENV=development jest --verbose --runInBand --detectOpenHandles"
   },
   "keywords": [],
   "author": "Nicolás Montañez Velasco",
@@ -21,10 +21,13 @@
   "devDependencies": {
     "jest": "29.4.2",
     "nodemon": "2.0.20",
-    "standard": "^17.0.0",
-    "supertest": "^6.3.3"
+    "standard": "17.0.0",
+    "supertest": "6.3.3"
   },
   "jest": {
     "testEnvironment": "node"
+  },
+  "standard": {
+    "env": [ "jest" ]
   }
 }
