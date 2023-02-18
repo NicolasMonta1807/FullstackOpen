@@ -1,39 +1,16 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
-const { app, server } = require('../index')
 const Blog = require('../models/blog')
+const { app, server } = require('../index')
+const helper = require('./test_helper')
 
 const api = supertest(app)
 
-const initialBlogs = [
-  {
-    title: 'Express good practices',
-    author: 'Foo Bar',
-    url: 'https://fullstackopen.com/en',
-    likes: 100
-  },
-  {
-    title: 'Blog title',
-    author: 'Bar Zoo',
-    url: 'https://fullstackopen.com/en',
-    likes: 150
-  },
-  {
-    title: 'Facebook sucks',
-    author: 'Bar Zoo',
-    url: 'https://fullstackopen.com/en',
-    likes: 80
-  }
-]
-
 beforeEach(async () => {
   await Blog.deleteMany({})
-  let blogObject = new Blog(initialBlogs[0])
-  await blogObject.save()
-  blogObject = new Blog(initialBlogs[1])
-  await blogObject.save()
-  blogObject = new Blog(initialBlogs[2])
-  await blogObject.save()
+  const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
+  const savePromises = blogObjects.map(blog => blog.save())
+  await Promise.all(savePromises)
 })
 
 describe('GET /api/blogs', () => {
@@ -46,17 +23,77 @@ describe('GET /api/blogs', () => {
 
   test('all blogs are returned', async () => {
     const response = await api.get('/api/blogs')
-    expect(response.body).toHaveLength(initialBlogs.length)
+    expect(response.body).toHaveLength(helper.initialBlogs.length)
   })
 
   test('certain blog is returned', async () => {
     const response = await api.get('/api/blogs')
     const titles = response.body.map(blog => blog.title)
-    expect(titles).toContain(initialBlogs[0].title)
+    expect(titles).toContain(helper.initialBlogs[0].title)
+  })
+
+  test('blog id is defined', async () => {
+    const response = await api.get('/api/blogs')
+    response.body.map(blog => expect(blog.id).toBeDefined())
   })
 })
 
-afterAll(async () => {
-  await mongoose.connection.close()
-  await server.close()
+describe('POST /api/blogs', () => {
+  test('a valid blog can be posted', async () => {
+    const blogToSave = {
+      title: 'async/await functions',
+      author: 'Bar Bar',
+      url: 'https://fullstackopen.com/en',
+      likes: 86
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(blogToSave)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const response = await helper.blogsInDb()
+    expect(response).toHaveLength(helper.initialBlogs.length + 1)
+    const blogTitles = response.map(blog => blog.title)
+    expect(blogTitles).toContain(blogToSave.title)
+  })
+
+  test('a post posted without likes, would be have default value of 0', async () => {
+    const blogToSave = {
+      title: 'async/await functions',
+      author: 'Bar Bar',
+      url: 'https://fullstackopen.com/en'
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(blogToSave)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const response = await helper.blogsInDb()
+    expect(response).toHaveLength(helper.initialBlogs.length + 1)
+    expect(response[helper.initialBlogs.length].likes).toBe(0)
+  })
+
+  test('a post without title or url cannot be posted', async () => {
+    const blogToSave = {
+      author: 'Foo Bar',
+      likes: 10
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(blogToSave)
+      .expect(400)
+
+    const response = await helper.blogsInDb()
+    expect(response).toHaveLength(helper.initialBlogs.length)
+  })
+})
+
+afterAll(() => {
+  mongoose.connection.close()
+  server.close()
 })
