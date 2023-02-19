@@ -14,6 +14,10 @@ describe('blogs testing', () => {
     const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
     const savePromises = blogObjects.map(blog => blog.save())
     await Promise.all(savePromises)
+
+    // await User.deleteMany({})
+    const userPromises = helper.initialUsers.map(user => api.post('/api/users').send(user))
+    await Promise.all(userPromises)
   })
 
   describe('GET /api/blogs', () => {
@@ -43,6 +47,11 @@ describe('blogs testing', () => {
 
   describe('POST /api/blogs', () => {
     test('a valid blog can be posted', async () => {
+      const userForToken = helper.initialUsers[0]
+      delete userForToken.name
+      const auth = await api.post('/api/login').send(userForToken)
+      const token = auth.body.token
+
       const blogToSave = {
         title: 'async/await functions',
         author: 'Bar Bar',
@@ -53,6 +62,7 @@ describe('blogs testing', () => {
       await api
         .post('/api/blogs')
         .send(blogToSave)
+        .set('Authorization', `Bearer ${token}`)
         .expect(201)
         .expect('Content-Type', /application\/json/)
 
@@ -63,6 +73,11 @@ describe('blogs testing', () => {
     })
 
     test('a post posted without likes, would be have default value of 0', async () => {
+      const userForToken = helper.initialUsers[0]
+      delete userForToken.name
+      const auth = await api.post('/api/login').send(userForToken)
+      const token = auth.body.token
+
       const blogToSave = {
         title: 'async/await functions',
         author: 'Bar Bar',
@@ -72,6 +87,7 @@ describe('blogs testing', () => {
       await api
         .post('/api/blogs')
         .send(blogToSave)
+        .set('Authorization', `Bearer ${token}`)
         .expect(201)
         .expect('Content-Type', /application\/json/)
 
@@ -81,6 +97,11 @@ describe('blogs testing', () => {
     })
 
     test('a post without title or url cannot be posted', async () => {
+      const userForToken = helper.initialUsers[0]
+      delete userForToken.name
+      const auth = await api.post('/api/login').send(userForToken)
+      const token = auth.body.token
+
       const blogToSave = {
         author: 'Foo Bar',
         likes: 10
@@ -89,10 +110,25 @@ describe('blogs testing', () => {
       await api
         .post('/api/blogs')
         .send(blogToSave)
+        .set('Authorization', `Bearer ${token}`)
         .expect(400)
 
       const response = await helper.blogsInDb()
       expect(response).toHaveLength(helper.initialBlogs.length)
+    })
+
+    test('a post without token authentication is rejected', async () => {
+      const blogToSave = {
+        author: 'Foo Bar',
+        likes: 10
+      }
+
+      const response = await api
+        .post('/api/blogs')
+        .send(blogToSave)
+        .expect(401)
+
+      expect(response.body.error).toContain('Unauthorized')
     })
   })
 })
