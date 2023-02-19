@@ -3,7 +3,7 @@ GET http://localhost:8080/api/blogs
 ###
 POST http://localhost:8080/api/blogs HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5pa29yZXN1IiwiaWQiOiI2M2YyN2IxNWYwYTYzZDAxNDYwM2ExOGUiLCJpYXQiOjE2NzY4MzcxNjh9.kla4wR5wzbxbPvah59JSYMdBqzefkKAn_GgXcUfZ0CU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5pa29yZXN1IiwiaWQiOiI2M2YyODRlMDM0MjVlMGYxYTBjYjFlYzYiLCJpYXQiOjE2NzY4MzgxODN9.nwC2NRU5e_F_ebaG-_XR-SPr9hMlYaV2mvsOGdmxXa4
 
 {
   "title": "async/await functions",
@@ -51,6 +51,6 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:8080/api/blogs/63f2826099b8e4d159ceb32f
+DELETE http://localhost:8080/api/blogs/63f2856ab6e66730f4b4a6bb
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5pa29yZXN1IiwiaWQiOiI2M2YyN2IxNWYwYTYzZDAxNDYwM2ExOGUiLCJpYXQiOjE2NzY4Mzc1OTh9.T7QrxgLuYNGWCgPD9xm7c05GVbF1krHI5LVlqq6KLMA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5pa29yZXN1IiwiaWQiOiI2M2YyODRlMDM0MjVlMGYxYTBjYjFlYzYiLCJpYXQiOjE2NzY4MzgzMTh9.Zmt8Fj6hFlP-D4rNch97IkaqVUJvI_9YrV90gqpuoVw
