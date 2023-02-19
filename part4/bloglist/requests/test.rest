@@ -30,3 +30,12 @@ Content-Type: application/json
   "name": "Foo Bar",
   "password": "mypass2023"
 }
+
+###
+POST http://localhost:8080/api/login
+Content-Type: application/json
+
+{
+  "username": "nikoresu",
+  "password": "Sekretp@ss4321"
+}
