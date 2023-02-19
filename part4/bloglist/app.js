@@ -7,7 +7,7 @@ const logger = require('./utils/logger')
 const middleware = require('./utils/middleware')
 const app = express()
 const blogRouter = require('./controllers/blogs')
-const userRouter = require('./controllers/user')
+const userRouter = require('./controllers/users')
 
 mongoose.set('strictQuery', false)
 

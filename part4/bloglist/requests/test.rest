@@ -5,10 +5,10 @@ POST http://localhost:8080/api/blogs HTTP/1.1
 Content-Type: application/json
 
 {
-  "title": "Express good practices",
-  "author": "Foo Bar",
+  "title": "async/await functions",
+  "author": "Bar Zoo",
   "url": "https://fullstackopen.com/en",
-  "likes": 100
+  "likes": 67
 }
 
 ###
