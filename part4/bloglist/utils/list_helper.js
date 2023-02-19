@@ -30,7 +30,7 @@ const mostLikes = (blogs) => {
   const authors = _.uniq(blogs.map((blog) => blog.author))
   const likesCount = authors.map((author) => {
     let count = 0
-    blogs.map((blog) => {
+    blogs.forEach((blog) => {
       if (blog.author === author) {
         count += blog.likes
       }
