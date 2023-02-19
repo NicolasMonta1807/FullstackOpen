@@ -30,4 +30,21 @@ blogRouter.post('/', async (req, res) => {
   res.status(201).json(savedBlog)
 })
 
+blogRouter.delete('/:id', async (req, res) => {
+  const decodedToken = jwt.verify(req.token, process.env.SECRET)
+  const blog = await Blog.findById(req.params.id)
+
+  if (blog.user.toString() !== decodedToken.id) {
+    return res.status(401).send({ error: 'user unauthorized' })
+  }
+
+  await Blog.findByIdAndDelete(req.params.id)
+
+  const user = await User.findById(decodedToken.id)
+  user.blogs = user.blogs.splice(user.blogs.indexOf(req.param.id), 1)
+  await user.save()
+
+  res.status(204).end()
+})
+
 module.exports = blogRouter
