@@ -10,3 +10,23 @@ Content-Type: application/json
   "url": "https://fullstackopen.com/en",
   "likes": 100
 }
+
+###
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "username": "nikoresu",
+  "name": "Nicolás Montañez",
+  "password": "Sekretp@ss4321"
+}
+
+###
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "username": "standUser",
+  "name": "Foo Bar",
+  "password": "mypass2023"
+}

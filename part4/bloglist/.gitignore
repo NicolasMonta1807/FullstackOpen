@@ -3,6 +3,3 @@ node_modules
 
 # env variables
 .env
-
-# REST requests
-./requests
