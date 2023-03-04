@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import Notification from './components/Notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -11,6 +12,8 @@ const App = () => {
   const [title, setTitle] = useState("")
   const [author, setAuthor] = useState("")
   const [url, setUrl] = useState("")
+  const [message, setMessage] = useState(null)
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -29,19 +32,34 @@ const App = () => {
     event.preventDefault()
 
     try {
+      const user = await loginService.login({username, password})
+      window.localStorage.setItem('loggedUser', JSON.stringify(user))
+      setUser(user)
       setUsername("")
       setPassword("")
-      const user = await loginService.login({username, password})
-      setUser(user)
-      window.localStorage.setItem('loggedUser', JSON.stringify(user))
+      setMessage("Login succesfully")
+      setError(false)
+      setTimeout(() => {
+        setMessage(null)
+      }, 3000);
     } catch (exception) {
-      console.log('Wrong Credentials');
+      setMessage("Wrong credentials")
+      setError(true)
+      setTimeout(() => {
+        setMessage(null)
+        setError(false)
+      }, 3000);
     }
   }
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggedUser')
     setUser(null)
+    setMessage("Logout succesfully")
+    setError(false)
+    setTimeout(() => {
+      setMessage(null)
+    }, 3000);
   }
 
   const LoginForm = () => (
@@ -72,13 +90,32 @@ const App = () => {
 
   const createBlog = async (event) => {
     event.preventDefault()
-    const newBlog = await blogService.post({
-      blog: {
-        title, author, url
-      },
-      user
-    })
-    setBlogs(blogs.concat(newBlog))
+
+    try {
+      const newBlog = await blogService.post({
+        blog: {
+          title, author, url
+        },
+        user
+      })
+      setBlogs(blogs.concat(newBlog))
+      setMessage(`Blog ${title} by ${author} created`)
+      setError(false)
+      setTimeout(() => {
+        setMessage(null)
+      }, 3000);
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+    } catch (exception) {
+      setMessage("Invalid request")
+      setError(true)
+      setTimeout(() => {
+        setMessage(null)
+      }, 3000);
+    }
+
+    
   }
 
   const BlogForm = () => (
@@ -119,6 +156,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
+      <Notification message={message} error={error} />
       {!user && LoginForm()}
       {user && 
         <div>
