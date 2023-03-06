@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import BlogForm from './components/BlogForm'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
@@ -9,9 +11,6 @@ const App = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [user, setUser] = useState(null)
-  const [title, setTitle] = useState("")
-  const [author, setAuthor] = useState("")
-  const [url, setUrl] = useState("")
   const [message, setMessage] = useState(null)
   const [error, setError] = useState(false)
 
@@ -88,25 +87,15 @@ const App = () => {
     </>
   )
 
-  const createBlog = async (event) => {
-    event.preventDefault()
-
+  const createBlog = async (blogObject) => {
     try {
-      const newBlog = await blogService.post({
-        blog: {
-          title, author, url
-        },
-        user
-      })
+      const newBlog = await blogService.post(blogObject, user)
       setBlogs(blogs.concat(newBlog))
-      setMessage(`Blog ${title} by ${author} created`)
+      setMessage(`Blog ${newBlog.title} by ${newBlog.author} created`)
       setError(false)
       setTimeout(() => {
         setMessage(null)
       }, 3000);
-      setTitle('')
-      setAuthor('')
-      setUrl('')
     } catch (exception) {
       setMessage("Invalid request")
       setError(true)
@@ -114,44 +103,7 @@ const App = () => {
         setMessage(null)
       }, 3000);
     }
-
-    
   }
-
-  const BlogForm = () => (
-    <div>
-      <form onSubmit={createBlog} >
-        <div>
-          <label htmlFor="title">Title: </label>
-          <input 
-            type="text" 
-            name="title"
-            value={title}
-            onChange={({target}) => {setTitle(target.value)}}
-            />
-        </div>
-        <div>        
-          <label htmlFor="author">Author: </label>
-          <input 
-            type="text" 
-            name="author"
-            value={author}
-            onChange={({target}) => {setAuthor(target.value)}}
-          />
-        </div>
-        <div>        
-          <label htmlFor="url">Url: </label>
-          <input 
-            type="text" 
-            name="url"
-            value={url}
-            onChange={({target}) => {setUrl(target.value)}}
-          />
-        </div>
-        <button type="submit">Create</button>
-      </form>
-    </div>
-  )
 
   return (
     <div>
@@ -166,7 +118,9 @@ const App = () => {
             </p>
           </div>
           <div>
-            {BlogForm()}
+            <Togglable buttonLabel="Create new blog">
+              <BlogForm createBlog={createBlog}/>
+            </Togglable>
           </div>
           {blogs.map(blog =>
             <Blog key={blog.id} blog={blog} />)}

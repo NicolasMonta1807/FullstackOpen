@@ -6,7 +6,7 @@ const getAll = () => {
   return request.then(response => response.data)
 }
 
-const post = ({blog, user}) => {
+const post = (blog, user) => {
   const request =  axios.post(baseUrl, blog, {headers: {'Authorization': `Bearer ${user.token}`}})
   return request.then(response => response.data)
 }
