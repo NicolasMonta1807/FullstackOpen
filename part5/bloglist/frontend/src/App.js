@@ -98,13 +98,13 @@ const App = () => {
       setError(false)
       setTimeout(() => {
         setMessage(null)
-      }, 3000);
+      }, 3000)
     } catch (exception) {
       setMessage("Invalid request")
       setError(true)
       setTimeout(() => {
         setMessage(null)
-      }, 3000);
+      }, 3000)
     }
   }
 
