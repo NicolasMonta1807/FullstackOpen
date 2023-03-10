@@ -1,7 +1,6 @@
-import { useState } from "react"
+import { useState } from 'react'
 
-const Blog = ({ blog, handleLike }) => {
-
+const Blog = ({ blog, handleLike, userId, handleDelete }) => {
   const [viewDetails, setviewDetails] = useState(false)
 
   const blogStyle = {
@@ -24,15 +23,19 @@ const Blog = ({ blog, handleLike }) => {
           {viewDetails ? 'hide' : 'view'}
         </button>
       </div>
-      {viewDetails && 
+      {viewDetails && (
         <div>
           <p>Find it on: {blog.url}</p>
           <p>
             Likes: {blog.likes}
             <button onClick={handleLike}>Like</button>
-          </p> 
+          </p>
           <p>Created by: {blog.user.username}</p>
-        </div>}
+          {userId === blog.user.username ? (
+            <button onClick={handleDelete}>Remove</button>
+          ) : null}
+        </div>
+      )}
     </div>
   )
 }

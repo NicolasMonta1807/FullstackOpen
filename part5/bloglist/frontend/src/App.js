@@ -19,7 +19,7 @@ const App = () => {
   useEffect(() => {
     const fetchBlogs = async () => {
       const blogs = await blogService.getAll()
-      blogs.sort((a, b) => (a.likes < b.likes) ? 1 : -1)
+      blogs.sort((a, b) => (a.likes < b.likes ? 1 : -1))
       setBlogs(blogs)
     }
     fetchBlogs()
@@ -135,6 +135,11 @@ const App = () => {
     )
   }
 
+  const handleDelete = async (blogId) => {
+    await blogService.deleteBlog(blogId, user)
+    setBlogs(blogs.filter(blog => blog.id !== blogId))
+  }
+
   return (
     <div>
       <h2>blogs</h2>
@@ -154,7 +159,13 @@ const App = () => {
             </Togglable>
           </div>
           {blogs.map(blog => (
-            <Blog key={blog.id} blog={blog} handleLike={() => likeBlog(blog)} />
+            <Blog
+              key={blog.id}
+              blog={blog}
+              handleLike={() => likeBlog(blog)}
+              userId={user.username}
+              handleDelete={() => handleDelete(blog.id)}
+            />
           ))}
         </div>
       )}
