@@ -27,5 +27,4 @@ const deleteBlog = async (blogId, user) => {
   return response.data
 }
 
-// eslint-disable-next-line import/no-anonymous-default-export
 export default { getAll, post, update, deleteBlog }
