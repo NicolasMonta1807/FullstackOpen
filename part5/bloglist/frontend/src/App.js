@@ -76,6 +76,7 @@ const App = () => {
             value={username}
             name='username'
             onChange={({ target }) => setUsername(target.value)}
+            id='username'
           />
         </div>
         <div>
@@ -85,9 +86,10 @@ const App = () => {
             value={password}
             name='password'
             onChange={({ target }) => setPassword(target.value)}
+            id='password'
           />
         </div>
-        <button type='submit'>Login</button>
+        <button id='login-button' type='submit'>Login</button>
       </form>
     </>
   )
