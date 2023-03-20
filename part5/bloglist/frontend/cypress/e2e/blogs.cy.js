@@ -54,5 +54,28 @@ describe('Blogs', function() {
       cy.get('.notification').contains('Blog Testing cypress blog by Foo Bar created')
       cy.get('#blog:first').contains('Testing cypress blog')
     })
+
+    describe('and a blog exists', function() {
+      beforeEach(function() {
+        cy.createBlog({
+          title: 'A cypress blog',
+          author: 'Foo Bar',
+          url: 'fullstackopen.com/en',
+          user: {
+            username: 'nikoresu',
+            password: 'sekr3tp@ss1234'
+          }
+        })
+      })
+
+      it('user can like a blog', function() {
+        cy.get('#blog:first')
+          .contains('A cypress blog')
+          .contains('View')
+          .click()
+        cy.contains('Like')
+          .click()
+      })
+    })
   })
 })
