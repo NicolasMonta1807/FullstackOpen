@@ -1,14 +1,14 @@
 Cypress.Commands.add('login', ({ username, password }) => {
-  cy.request('POST', 'http://localhost:8080/api/login', { username, password })
+  cy.request('POST', `${Cypress.env('BACKEND')}/login`, { username, password })
     .then(response => {
       localStorage.setItem('loggedUser', JSON.stringify(response.body))
-      cy.visit('http://localhost:3000')
+      cy.visit('')
     })
 })
 
 Cypress.Commands.add('createBlog', ({ title, author, url }) => {
   cy.request({
-    url: 'http://localhost:8080/api/blogs',
+    url: `${Cypress.env('BACKEND')}/blogs`,
     method: 'POST',
     body: {
       title, author, url
@@ -20,7 +20,7 @@ Cypress.Commands.add('createBlog', ({ title, author, url }) => {
 })
 
 Cypress.Commands.add('createUser', ({ name, username, password }) => {
-  cy.request('POST', 'http://localhost:8080/api/users', {
+  cy.request('POST', `${Cypress.env('BACKEND')}/users`, {
     name, username, password
   })
 })

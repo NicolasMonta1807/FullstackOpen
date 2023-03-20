@@ -7,7 +7,7 @@ describe('Blogs', function() {
       username: 'nikoresu',
       password: 'sekr3tp@ss1234'
     })
-    cy.visit('http://localhost:3000')
+    cy.visit('')
   })
 
   it('front page can be opened', function() {
@@ -61,7 +61,7 @@ describe('Blogs', function() {
           author: 'Foo Bar',
           url: 'fullstackopen.com/en'
         })
-        cy.visit('http://localhost:3000')
+        cy.visit('')
       })
 
       it('user can like a blog', function() {
@@ -145,7 +145,7 @@ describe('Blogs', function() {
           author: 'Foo Bar',
           url: 'fullstackopen.com/en'
         })
-        cy.visit('http://localhost:3000')
+        cy.visit('')
         cy.contains('The blog with most likes').parent().as('blog1')
         cy.contains('The blog with the second most likes').parent().as('blog2')
         cy.contains('The blog with the less likes').parent().as('blog3')
