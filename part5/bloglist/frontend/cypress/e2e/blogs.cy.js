@@ -2,12 +2,11 @@ describe('Blogs', function() {
 
   beforeEach(function () {
     cy.request('POST', 'http://localhost:8080/api/testing/reset')
-    const user = {
+    cy.createUser({
       name: 'Nicolás Montañez',
       username: 'nikoresu',
       password: 'sekr3tp@ss1234'
-    }
-    cy.request('POST', 'http://localhost:8080/api/users', user)
+    })
     cy.visit('http://localhost:3000')
   })
 
@@ -60,12 +59,9 @@ describe('Blogs', function() {
         cy.createBlog({
           title: 'A cypress blog',
           author: 'Foo Bar',
-          url: 'fullstackopen.com/en',
-          user: {
-            username: 'nikoresu',
-            password: 'sekr3tp@ss1234'
-          }
+          url: 'fullstackopen.com/en'
         })
+        cy.visit('http://localhost:3000')
       })
 
       it('user can like a blog', function() {
@@ -75,6 +71,57 @@ describe('Blogs', function() {
           .click()
         cy.contains('Like')
           .click()
+      })
+
+      it('user can delete a blog', function() {
+        cy.get('#blog:first')
+          .contains('A cypress blog')
+          .contains('View')
+          .click()
+        cy.contains('Remove')
+          .click()
+      })
+    })
+
+    describe('and several blog exist', function() {
+      beforeEach(function () {
+        cy.createUser({
+          name: 'Bar Zoo',
+          username: 'root',
+          password: 'myp@ss2023'
+        })
+        cy.login({ username: 'nikoresu', password: 'sekr3tp@ss1234' })
+        cy.createBlog({
+          title: 'A cypress blog',
+          author: 'Foo Bar',
+          url: 'fullstackopen.com/en'
+        })
+        cy.login({ username: 'root', password: 'myp@ss2023' })
+        cy.createBlog({
+          title: 'Another cypress blog',
+          author: 'Foo Bar',
+          url: 'fullstackopen.com/en'
+        })
+        cy.createBlog({
+          title: 'One more cypress blog',
+          author: 'Foo Bar',
+          url: 'fullstackopen.com/en'
+        })
+        cy.login({ username: 'nikoresu', password: 'sekr3tp@ss1234' })
+      })
+
+      it('only the creator can see the delete button', function() {
+        cy.get('#blog:last-of-type')
+          .contains('View')
+          .click()
+        cy.get('#blog:last-of-type')
+          .contains('Remove')
+
+        cy.get('#blog')
+          .contains('View')
+          .click()
+        cy.get('#blog:first')
+          .should('not.contain', 'Remove')
       })
     })
   })

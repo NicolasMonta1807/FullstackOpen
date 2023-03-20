@@ -6,10 +6,7 @@ Cypress.Commands.add('login', ({ username, password }) => {
     })
 })
 
-Cypress.Commands.add('createBlog', ({ title, author, url, user }) => {
-  const username = user.username
-  const password = user.password
-  cy.login({ username, password })
+Cypress.Commands.add('createBlog', ({ title, author, url }) => {
   cy.request({
     url: 'http://localhost:8080/api/blogs',
     method: 'POST',
@@ -19,7 +16,11 @@ Cypress.Commands.add('createBlog', ({ title, author, url, user }) => {
     headers: {
       Authorization: `Bearer ${JSON.parse(localStorage.getItem('loggedUser')).token}`
     }
-  }).then(() => {
-    cy.visit('http://localhost:3000')
+  })
+})
+
+Cypress.Commands.add('createUser', ({ name, username, password }) => {
+  cy.request('POST', 'http://localhost:8080/api/users', {
+    name, username, password
   })
 })
