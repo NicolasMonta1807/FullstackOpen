@@ -39,4 +39,20 @@ describe('Blogs', function() {
         .and('have.css', 'color', 'rgb(255, 0, 0)')
     })
   })
+
+  describe('when logged in', function() {
+    beforeEach(function () {
+      cy.login({ username: 'nikoresu', password: 'sekr3tp@ss1234' })
+    })
+
+    it('can create a new blog', function() {
+      cy.contains('Create new blog').click()
+      cy.get('#titleInput').type('Testing cypress blog')
+      cy.get('#authorInput').type('Foo Bar')
+      cy.get('#urlInput').type('fullstackopen.com/en')
+      cy.get('#createBlogButton').click()
+      cy.get('.notification').contains('Blog Testing cypress blog by Foo Bar created')
+      cy.get('#blog:first').contains('Testing cypress blog')
+    })
+  })
 })
