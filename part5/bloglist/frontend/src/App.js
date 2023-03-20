@@ -133,7 +133,7 @@ const App = () => {
           }
         }
         return blog
-      })
+      }).sort((a, b) => a.likes < b.likes ? 1 : -1)
     )
   }
 

@@ -80,6 +80,8 @@ describe('Blogs', function() {
           .click()
         cy.contains('Remove')
           .click()
+
+        cy.get('html').should('not.contain', 'A cypress blog')
       })
     })
 
@@ -122,6 +124,58 @@ describe('Blogs', function() {
           .click()
         cy.get('#blog:first')
           .should('not.contain', 'Remove')
+      })
+    })
+
+    describe('sorting blogs', function() {
+      beforeEach(function() {
+        cy.login({ username: 'nikoresu', password: 'sekr3tp@ss1234' })
+        cy.createBlog({
+          title: 'The blog with most likes',
+          author: 'Foo Bar',
+          url: 'fullstackopen.com/en',
+        })
+        cy.createBlog({
+          title: 'The blog with the second most likes',
+          author: 'Foo Bar',
+          url: 'fullstackopen.com/en'
+        })
+        cy.createBlog({
+          title: 'The blog with the less likes',
+          author: 'Foo Bar',
+          url: 'fullstackopen.com/en'
+        })
+        cy.visit('http://localhost:3000')
+        cy.contains('The blog with most likes').parent().as('blog1')
+        cy.contains('The blog with the second most likes').parent().as('blog2')
+        cy.contains('The blog with the less likes').parent().as('blog3')
+      })
+
+      it('blogs are sorted properly', function() {
+        cy.get('@blog1').contains('View').click()
+        cy.get('@blog1').contains('Like').as('like1')
+
+        cy.get('@like1').click()
+        cy.wait(500)
+        cy.get('@like1').click()
+        cy.wait(500)
+        cy.get('@like1').click()
+
+        cy.get('@blog2').contains('View').click()
+        cy.get('@blog2').contains('Like').as('like2')
+
+        cy.get('@like2').click()
+        cy.wait(500)
+        cy.get('@like2').click()
+
+        cy.get('@blog3').contains('View').click()
+        cy.get('@blog3').contains('Like').as('like3')
+
+        cy.get('@like3').click()
+
+        cy.get('@blog1').contains('3')
+        cy.get('@blog2').contains('2')
+        cy.get('@blog3').contains('1')
       })
     })
   })
