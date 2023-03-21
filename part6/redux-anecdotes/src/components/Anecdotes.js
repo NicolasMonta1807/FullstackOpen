@@ -17,7 +17,12 @@ const Anecdote = ({ anecdote, handleVote }) => (
 
 const Anecdotes = () => {
   const dispatch = useDispatch()
-  const anecdotes = useSelector(state => state.sort((a, b) => a.votes < b.votes ? 1 : -1))
+  const anecdotes = useSelector(({ anecdotes, filter }) => {
+    if (filter === '') {
+      return anecdotes.sort((a, b) => a.votes < b.votes ? 1 : -1)
+    }
+    return anecdotes.filter(anecdote => anecdote.content.toUpperCase().includes(filter.toUpperCase()))
+  })
 
   return (
     <div>
