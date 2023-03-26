@@ -1,21 +1,39 @@
 import AnecdoteForm from './components/AnecdoteForm'
 import Notification from './components/Notification'
-import { useQuery } from 'react-query'
-import { getAll } from './requests'
+import { useQuery, useMutation, useQueryClient } from 'react-query'
+import { getAll, updateAnecdote } from './requests'
 
 const App = () => {
+  const queryClient = useQueryClient()
+
+  const voteAnecdoteMutator = useMutation(updateAnecdote, {
+    onSuccess: updatedAnecdote => {
+      const anecdotes = queryClient.getQueryData('anecdotes')
+      queryClient.setQueryData(
+        'anecdotes',
+        anecdotes.map(anecdote =>
+          anecdote.id === updatedAnecdote.id ? updatedAnecdote : anecdote
+        )
+      )
+    }
+  })
+
   const handleVote = anecdote => {
-    console.log('vote')
+    voteAnecdoteMutator.mutate({ ...anecdote, votes: anecdote.votes + 1 })
   }
 
-  const { data, isLoading, isError } = useQuery('anecdotes', getAll, { retry: false })
+  const { data, isLoading, isError } = useQuery('anecdotes', getAll, {
+    retry: false
+  })
 
   if (isLoading) {
     return <div>Loading data...</div>
   }
 
   if (isError) {
-    return <div>Anecdotes service is not available due to internal server error</div>
+    return (
+      <div>Anecdotes service is not available due to internal server error</div>
+    )
   }
 
   const anecdotes = data
