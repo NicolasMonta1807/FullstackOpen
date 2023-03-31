@@ -4,13 +4,19 @@ import { createAnecdote } from '../requests'
 
 const AnecdoteForm = () => {
   const queryClient = useQueryClient()
-
   const dispatch = useDispatchValue()
 
   const newAnecdoteMutator = useMutation(createAnecdote, {
     onSuccess: newAnecdote => {
       const anecdotes = queryClient.getQueryData('anecdotes')
       queryClient.setQueryData('anecdotes', anecdotes.concat(newAnecdote))
+    },
+    onError: error => {
+      const errorMessage = error.response.data.error
+      dispatch({ type: 'SET_MESSAGE', payload: errorMessage })
+      setTimeout(() => {
+        dispatch({ type: 'CLEAR_MESSAGE' })
+      }, 5000)
     }
   })
 
