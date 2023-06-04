@@ -1,31 +1,26 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { setNotification } from '../reducers/notificationReducer'
 import { setUser } from '../reducers/userReducer'
 import loginService from '../services/login'
+import { useNavigate } from 'react-router-dom'
 
 const LoginForm = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
   const dispatch = useDispatch()
-
-  useEffect(() => {
-    const loggedUser = window.localStorage.getItem('loggedUser')
-    if (loggedUser) {
-      dispatch(setUser(JSON.parse(loggedUser)))
-    }
-  }, [dispatch])
+  const navigate = useNavigate()
 
   const handleLogin = async event => {
     event.preventDefault()
-
     try {
       const user = await loginService.login({ username, password })
       window.localStorage.setItem('loggedUser', JSON.stringify(user))
       dispatch(setUser(user))
       setUsername('')
       setPassword('')
+      navigate('/')
       dispatch(setNotification('Login successful', 3000))
     } catch (exception) {
       dispatch(setNotification('Wrong Credentials', 3000))

@@ -1,23 +1,16 @@
-import { useEffect, useRef } from 'react'
-import BlogForm from './components/BlogForm'
-import Togglable from './components/Togglable'
+import Home from './pages/Home'
+import Login from './pages/Login'
+import Protected from './pages/Protected'
 import Notification from './components/Notification'
-import LoginForm from './components/LoginForm'
-import BlogList from './components/BlogList'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import NavBar from './components/NavBar'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from './reducers/userReducer'
 import { setNotification } from './reducers/notificationReducer'
-import { initializeBlogs, newBlog } from './reducers/blogsReducer'
 
 const App = () => {
   const user = useSelector(({ user }) => user)
   const dispatch = useDispatch()
-
-  const blogFormRef = useRef()
-
-  useEffect(() => {
-    dispatch(initializeBlogs())
-  }, [dispatch])
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggedUser')
@@ -25,33 +18,31 @@ const App = () => {
     dispatch(setNotification('Logout successfuly', 3000))
   }
 
-  const createBlog = async (blog) => {
-    blogFormRef.current.toggleVisibility()
-    dispatch(newBlog(blog, user))
-  }
-
   return (
-    <div>
-      <h2>blogs</h2>
-      <Notification />
-      {!user && <LoginForm />}
-      {user && (
-        <div>
-          <div>
+    <Router>
+      <h2>Blog List</h2>
+      {user &&
+        (
+          <>
+            <NavBar />
+            <Notification />
             <p>
               Logged in as {user.username}
               <button onClick={handleLogout}>Logout</button>
             </p>
-          </div>
-          <div>
-            <Togglable buttonLabel='Create new blog' ref={blogFormRef}>
-              <BlogForm createBlog={createBlog} />
-            </Togglable>
-          </div>
-          <BlogList />
-        </div>
-      )}
-    </div>
+          </>
+        )}
+      <Routes>
+        <Route path='/login' element={<Login />} />
+        <Route
+          path='/' element={
+            <Protected redirectPath='/login'>
+              <Home />
+            </Protected>
+        }
+        />
+      </Routes>
+    </Router>
   )
 }
 
