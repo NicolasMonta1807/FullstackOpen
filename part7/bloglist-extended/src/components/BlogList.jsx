@@ -1,9 +1,19 @@
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Blog from './Blog'
+import { likeBlog, removeBlog } from '../reducers/blogsReducer'
 
 const BlogList = () => {
   const blogs = useSelector(({ blogs }) => blogs)
   const user = useSelector(({ user }) => user)
+  const dispatch = useDispatch()
+
+  const handleLike = (blog) => {
+    dispatch(likeBlog(blog, user))
+  }
+
+  const handleDelete = (blog) => {
+    dispatch(removeBlog(blog, user))
+  }
 
   return (
     <div className='blogs'>
@@ -11,9 +21,9 @@ const BlogList = () => {
         <Blog
           key={blog.id}
           blog={blog}
-          handleLike={() => console.log('Like for: ', blog.title)}
+          handleLike={() => handleLike(blog)}
           userId={user.username}
-          handleDelete={() => console.log('Delete: ', blog.title)}
+          handleDelete={() => handleDelete(blog)}
         />
       ))}
     </div>
