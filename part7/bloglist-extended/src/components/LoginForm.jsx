@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { setNotification } from '../reducers/notificationReducer'
 import { setUser } from '../reducers/userReducer'
@@ -9,6 +9,13 @@ const LoginForm = () => {
   const [password, setPassword] = useState('')
 
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    const loggedUser = window.localStorage.getItem('loggedUser')
+    if (loggedUser) {
+      dispatch(setUser(JSON.parse(loggedUser)))
+    }
+  }, [dispatch])
 
   const handleLogin = async event => {
     event.preventDefault()
