@@ -1,5 +1,6 @@
 import Home from './pages/Home'
 import Login from './pages/Login'
+import Users from './pages/Users'
 import Protected from './pages/Protected'
 import Notification from './components/Notification'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
@@ -25,13 +26,13 @@ const App = () => {
         (
           <>
             <NavBar />
-            <Notification />
             <p>
               Logged in as {user.username}
               <button onClick={handleLogout}>Logout</button>
             </p>
           </>
         )}
+      <Notification />
       <Routes>
         <Route path='/login' element={<Login />} />
         <Route
@@ -40,6 +41,14 @@ const App = () => {
           element={
             <Protected redirectPath='/login'>
               <Home />
+            </Protected>
+          }
+        />
+        <Route
+          path='/users'
+          element={
+            <Protected redirectPath='/login'>
+              <Users />
             </Protected>
           }
         />

@@ -26,7 +26,7 @@ const Blog = ({ blog, handleLike, userId, handleDelete }) => {
       </div>
       {viewDetails && (
         <div id='blogDetails'>
-          <p>Find it on: {blog.url}</p>
+          <p>Find it <a href={blog.url} target='_blank' rel='noreferrer'>here</a></p>
           <p>
             Likes: {blog.likes}
             <button onClick={handleLike}>Like</button>
