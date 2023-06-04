@@ -35,11 +35,13 @@ const App = () => {
       <Routes>
         <Route path='/login' element={<Login />} />
         <Route
-          path='/' element={
+          exact
+          path='/'
+          element={
             <Protected redirectPath='/login'>
               <Home />
             </Protected>
-        }
+          }
         />
       </Routes>
     </Router>
