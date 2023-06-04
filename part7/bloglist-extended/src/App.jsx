@@ -3,16 +3,18 @@ import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
-import loginService from './services/login'
 import Notification from './components/Notification'
+import LoginForm from './components/LoginForm'
+import { useDispatch, useSelector } from 'react-redux'
+import { setUser } from './reducers/userReducer'
+import { setNotification } from './reducers/notificationReducer'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
   const [message, setMessage] = useState(null)
   const [error, setError] = useState(false)
+  const user = useSelector(({ user }) => user)
+  const dispatch = useDispatch()
 
   const blogFormRef = useRef()
 
@@ -25,74 +27,11 @@ const App = () => {
     fetchBlogs()
   }, [])
 
-  useEffect(() => {
-    const loggedUser = window.localStorage.getItem('loggedUser')
-    if (loggedUser) {
-      setUser(JSON.parse(loggedUser))
-    }
-  }, [])
-
-  const handleLogin = async event => {
-    event.preventDefault()
-
-    try {
-      const user = await loginService.login({ username, password })
-      window.localStorage.setItem('loggedUser', JSON.stringify(user))
-      setUser(user)
-      setUsername('')
-      setPassword('')
-      setMessage('Login succesfully')
-      setError(false)
-      setTimeout(() => {
-        setMessage(null)
-      }, 3000)
-    } catch (exception) {
-      setMessage('Wrong credentials')
-      setError(true)
-      setTimeout(() => {
-        setMessage(null)
-        setError(false)
-      }, 3000)
-    }
-  }
-
   const handleLogout = () => {
     window.localStorage.removeItem('loggedUser')
-    setUser(null)
-    setMessage('Logout succesfully')
-    setError(false)
-    setTimeout(() => {
-      setMessage(null)
-    }, 3000)
+    dispatch(setUser(null))
+    dispatch(setNotification('Logout successfuly', 3000))
   }
-
-  const LoginForm = () => (
-    <>
-      <form onSubmit={handleLogin}>
-        <div>
-          <label htmlFor='username'>Username: </label>
-          <input
-            type='text'
-            value={username}
-            name='username'
-            onChange={({ target }) => setUsername(target.value)}
-            id='username'
-          />
-        </div>
-        <div>
-          <label htmlFor='password'>Password: </label>
-          <input
-            type='password'
-            value={password}
-            name='password'
-            onChange={({ target }) => setPassword(target.value)}
-            id='password'
-          />
-        </div>
-        <button id='login-button' type='submit'>Login</button>
-      </form>
-    </>
-  )
 
   const createBlog = async blogObject => {
     blogFormRef.current.toggleVisibility()
@@ -146,7 +85,7 @@ const App = () => {
     <div>
       <h2>blogs</h2>
       <Notification message={message} error={error} />
-      {!user && LoginForm()}
+      {!user && <LoginForm />}
       {user && (
         <div>
           <div>
