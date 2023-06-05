@@ -1,14 +1,15 @@
 const blogRouter = require('express').Router()
 const Blog = require('../models/blog')
+const Comment = require('../models/comment')
 const middleware = require('../utils/middleware')
 
 blogRouter.get('/', async (req, res) => {
-  const blogs = await Blog.find({}).populate('user', { blogs: 0 })
+  const blogs = await Blog.find({}).populate('user', { blogs: 0 }).populate('comments', { blog: 0 })
   res.json(blogs)
 })
 
 blogRouter.get('/:id', async (req, res) => {
-  const blogs = await Blog.findById(req.params.id).populate('user', { blogs: 0 })
+  const blogs = await Blog.findById(req.params.id).populate('user', { blogs: 0 }).populate('comments', { blog: 0 })
   res.json(blogs)
 })
 
@@ -32,6 +33,22 @@ blogRouter.post('/', middleware.userExtractor, async (req, res) => {
   res.status(201).json(savedBlog)
 })
 
+blogRouter.post('/:id/comments', async (req, res) => {
+  const { id } = req.params
+  const comment = req.body
+  const createdComment = await new Comment(comment).save()
+  const updatedBlog = await Blog.findByIdAndUpdate(
+    id,
+    { $push: { comments: createdComment._id } },
+    { new: true }
+  )
+  console.log(updatedBlog)
+  if (!updatedBlog) {
+    return res.status(404).json({ error: 'Blog not found' })
+  }
+  return res.json(updatedBlog)
+})
+
 blogRouter.put('/:id', middleware.userExtractor, async (req, res) => {
   const body = req.body
 
@@ -41,7 +58,7 @@ blogRouter.put('/:id', middleware.userExtractor, async (req, res) => {
 
   const blogUpdated = await Blog.findByIdAndUpdate(req.params.id, blog, {
     new: true
-  }).populate('user', { blogs: 0 })
+  }).populate('user', { blogs: 0 }).populate('comments', { blog: 0 })
   res.json(blogUpdated)
 })
 
