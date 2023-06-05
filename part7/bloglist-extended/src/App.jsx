@@ -1,6 +1,7 @@
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Users from './pages/Users'
+import UserProfile from './pages/UserProfile'
 import Protected from './pages/Protected'
 import Notification from './components/Notification'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
@@ -49,6 +50,14 @@ const App = () => {
           element={
             <Protected redirectPath='/login'>
               <Users />
+            </Protected>
+          }
+        />
+        <Route
+          path='/users/:id'
+          element={
+            <Protected redirectPath='/login'>
+              <UserProfile />
             </Protected>
           }
         />
