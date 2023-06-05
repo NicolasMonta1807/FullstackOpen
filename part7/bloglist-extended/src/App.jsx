@@ -6,19 +6,10 @@ import Protected from './pages/Protected'
 import Notification from './components/Notification'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import NavBar from './components/NavBar'
-import { useDispatch, useSelector } from 'react-redux'
-import { setUser } from './reducers/userReducer'
-import { setNotification } from './reducers/notificationReducer'
+import { useSelector } from 'react-redux'
 
 const App = () => {
   const user = useSelector(({ user }) => user)
-  const dispatch = useDispatch()
-
-  const handleLogout = () => {
-    window.localStorage.removeItem('loggedUser')
-    dispatch(setUser(null))
-    dispatch(setNotification('Logout successfuly', 3000))
-  }
 
   return (
     <Router>
@@ -26,11 +17,9 @@ const App = () => {
       {user &&
         (
           <>
-            <NavBar />
-            <p>
-              Logged in as {user.username}
-              <button onClick={handleLogout}>Logout</button>
-            </p>
+            <div>
+              <NavBar user={user} />
+            </div>
           </>
         )}
       <Notification />
