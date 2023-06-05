@@ -7,6 +7,11 @@ blogRouter.get('/', async (req, res) => {
   res.json(blogs)
 })
 
+blogRouter.get('/:id', async (req, res) => {
+  const blogs = await Blog.findById(req.params.id).populate('user', { blogs: 0 })
+  res.json(blogs)
+})
+
 blogRouter.post('/', middleware.userExtractor, async (req, res) => {
   const body = req.body
   const user = req.user
