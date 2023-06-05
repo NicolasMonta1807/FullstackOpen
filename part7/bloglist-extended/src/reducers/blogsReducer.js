@@ -29,10 +29,9 @@ const blogsReducer = createSlice({
 
 export const { setBlogs, appendBlog, updateBlog, deleteBlog } = blogsReducer.actions
 
-export const initializeBlogs = (blogs) => {
+export const initializeBlogs = () => {
   return async dispatch => {
-    const blogs = await blogService.getAll()
-    dispatch(setBlogs(blogs))
+    dispatch(setBlogs(await blogService.getAll()))
   }
 }
 

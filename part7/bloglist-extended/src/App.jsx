@@ -2,6 +2,7 @@ import Home from './pages/Home'
 import Login from './pages/Login'
 import Users from './pages/Users'
 import UserProfile from './pages/UserProfile'
+import BlogInfo from './pages/BlogInfo'
 import Protected from './pages/Protected'
 import Notification from './components/Notification'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
@@ -47,6 +48,14 @@ const App = () => {
           element={
             <Protected redirectPath='/login'>
               <UserProfile />
+            </Protected>
+          }
+        />
+        <Route
+          path='/blogs/:id'
+          element={
+            <Protected redirectPath='/login'>
+              <BlogInfo />
             </Protected>
           }
         />

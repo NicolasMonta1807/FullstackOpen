@@ -6,6 +6,11 @@ const getAll = () => {
   return request.then(response => response.data)
 }
 
+const getById = async (id) => {
+  const response = await axios.get(`${baseUrl}/${id}`)
+  return response.data
+}
+
 const post = (blog, user) => {
   const request = axios.post(baseUrl, blog, {
     headers: { Authorization: `Bearer ${user.token}` }
@@ -27,4 +32,4 @@ const deleteBlog = async (blogId, user) => {
   return response.data
 }
 
-export default { getAll, post, update, deleteBlog }
+export default { getAll, getById, post, update, deleteBlog }
