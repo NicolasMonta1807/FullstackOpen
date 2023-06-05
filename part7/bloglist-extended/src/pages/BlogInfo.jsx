@@ -2,6 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { initializeBlogs, likeBlog, removeBlog } from '../reducers/blogsReducer'
 import { useEffect } from 'react'
+import Comments from '../components/Comments'
 
 const BlogInfo = () => {
   const { id } = useParams()
@@ -49,6 +50,8 @@ const BlogInfo = () => {
         {user.username === blog.user.username && (
           <button onClick={handleDelete}>Remove</button>
         )}
+        <h3>Comments</h3>
+        <Comments comments={blog.comments} />
       </div>
     </div>
   )
