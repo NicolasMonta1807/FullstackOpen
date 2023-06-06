@@ -1,10 +1,17 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { commentBlog } from '../reducers/blogsReducer'
+import { useParams } from 'react-router-dom'
 
 const CommentForm = () => {
   const [comment, setComment] = useState('')
+  const dispatch = useDispatch()
+  const { id } = useParams()
 
-  const handleComment = () => {
-    console.log('Sending comment')
+  const handleComment = (e) => {
+    e.preventDefault()
+    setComment('')
+    dispatch(commentBlog(id, comment))
   }
 
   return (

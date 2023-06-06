@@ -4,9 +4,11 @@ const Comments = ({ comments }) => {
   return (
     <div>
       <ul>
-        {comments.map(comment => (
-          <li key={comment.id}>{comment.content}</li>
-        ))}
+        {comments.length !== 0
+          ? comments.map(comment => (
+            <li key={comment.id}>{comment.content}</li>
+          ))
+          : <i>Be the first to comment something</i>}
       </ul>
     </div>
   )

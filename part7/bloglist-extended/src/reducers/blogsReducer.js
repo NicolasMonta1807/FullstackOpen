@@ -63,4 +63,11 @@ export const removeBlog = (blog, user) => {
   }
 }
 
+export const commentBlog = (blogId, comment) => {
+  return async dispatch => {
+    const blog = await blogService.postComment(blogId, comment)
+    dispatch(updateBlog(blog))
+  }
+}
+
 export default blogsReducer.reducer

@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { initializeBlogs, likeBlog, removeBlog } from '../reducers/blogsReducer'
 import { useEffect } from 'react'
 import Comments from '../components/Comments'
+import CommentForm from '../components/CommentForm'
 
 const BlogInfo = () => {
   const { id } = useParams()
@@ -51,6 +52,7 @@ const BlogInfo = () => {
           <button onClick={handleDelete}>Remove</button>
         )}
         <h3>Comments</h3>
+        <CommentForm />
         <Comments comments={blog.comments} />
       </div>
     </div>
