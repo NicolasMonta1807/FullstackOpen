@@ -41,8 +41,7 @@ blogRouter.post('/:id/comments', async (req, res) => {
     id,
     { $push: { comments: createdComment._id } },
     { new: true }
-  )
-  console.log(updatedBlog)
+  ).populate('comments', { blog: 0 })
   if (!updatedBlog) {
     return res.status(404).json({ error: 'Blog not found' })
   }
